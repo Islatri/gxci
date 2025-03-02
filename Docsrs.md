@@ -6,8 +6,8 @@
 
 <p align="center">
   <a href="https://crates.io/crates/gxci" target="_blank"><img src="https://img.shields.io/crates/v/gxci"/></a>
-  <a href="https://docs.rs/gxci" target="_blank"><img src="https://img.shields.io/docsrs/gxci/0.3.6"/></a>
-  <a href="https://github.com/zoneherobrine/gxci" target="_blank"><img src="https://img.shields.io/badge/License-MIT-green.svg"/></a>
+  <a href="https://docs.rs/gxci" target="_blank"><img src="https://img.shields.io/docsrs/gxci/0.3.7"/></a>
+  <a href="https://github.com/islatri/gxci" target="_blank"><img src="https://img.shields.io/badge/License-MIT-green.svg"/></a>
 </p>
 
 <p align="center">

@@ -1,23 +1,23 @@
 [package]
 name = "gxci"
-version = "0.3.6"
-edition = "2021"
+version = "0.3.7"
+edition = "2024"
 authors = [
     "Hako Chest <zoneherobrine@gmail.com>"
 ]
-rust-version = "1.80.0"
+rust-version = "1.85.0"
 description = "A safe raw-and-HAL camera interface based on Daheng-Image's GxIAPI(Galaxy Camera SDK)"
 keywords = ["galaxy", "daheng", "camera","interface","hal"]
 categories = ["hardware-support"]
 license = "MIT"
 documentation = "https://docs.rs/gxci"
-repository = "https://github.com/zoneherobrine/gxci"
+repository = "https://github.com/islatri/gxci"
 
 [dependencies]
 libloading = "0.8.6"
 image = "0.25.5"
 imageproc = { version = "0.25.0", optional = true }
-opencv = { version = "0.93.5", optional = true }
+opencv = { version = "0.94.2", optional = true }
 
 [features]
 default = [ "solo", "use-opencv" ]

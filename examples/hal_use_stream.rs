@@ -5,7 +5,6 @@ use gxci::hal::control::image_format::*;
 use gxci::utils::debug::print_device_info;
 use gxci::utils::extract::{extract_callback_img_buf,extract_frame_callback_param};
 use gxci::raw::gx_struct::GX_FRAME_CALLBACK_PARAM;
-use gxci::raw::gx_interface::Result;
 use gxci::opencv::{core, highgui};
 
 
@@ -40,9 +39,12 @@ fn main()->Result<()> {
 
     gxi_open_device()?;
 
-    gxi_set_width(4024)?;
+    let max_h = gxi_get_max_height()?;
+    let max_w = gxi_get_max_width()?;
+
+    gxi_set_height(max_h)?;
+    gxi_set_width(max_w)?;
     
-    gxi_set_height(3036)?;
 
     gxi_set_gain_auto_continuous()?;
 

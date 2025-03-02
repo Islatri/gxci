@@ -7,6 +7,7 @@ currently being supported with security updates.
 
 | Version | Supported                      |
 | ------- | ------------------------------ |
+| 0.3.7   | :white_check_mark:OpenCV4.11.0 |
 | 0.3.6   | :white_check_mark:OpenCV4.10.0 |
 | ~0.3.5  | :white_check_mark:OpenCV4.9.0  |
 

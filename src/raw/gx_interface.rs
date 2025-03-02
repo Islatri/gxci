@@ -5,7 +5,7 @@ use libloading::{Library, Symbol};
 
 use std::ffi::{c_char, c_void, CStr};
 use crate::raw::{gx_callback::*, gx_enum::*, gx_handle::*, gx_struct::*};
-use crate::error::{Error, ErrorKind, Result};
+pub use crate::error::{Error, ErrorKind, Result};
 
 fn convert_to_gx_status(status_code: i32) -> GX_STATUS_LIST {
     match status_code {
