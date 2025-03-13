@@ -1,12 +1,7 @@
 #![allow(non_snake_case)]
 use std::ffi::c_char;
 
-use crate::raw::
-{
-    gx_enum::*,
-    gx_const::*,
-    gx_struct::*,
-};
+use crate::raw::{gx_const::*, gx_enum::*, gx_struct::*};
 
 pub struct GXDeviceBaseInfoBuilder {
     szVendorName: [u8; GX_INFO_LENGTH_32_BYTE],
@@ -19,7 +14,6 @@ pub struct GXDeviceBaseInfoBuilder {
     deviceClass: GX_DEVICE_CLASS,
     reserved: [u8; 300],
 }
-
 
 impl GXDeviceBaseInfoBuilder {
     pub fn new() -> Self {
@@ -96,7 +90,6 @@ impl GXDeviceBaseInfoBuilder {
         }
     }
 }
-
 
 pub struct GXOpenParamBuilder {
     pub pszContent: *const c_char,

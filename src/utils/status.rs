@@ -23,6 +23,6 @@ pub fn convert_to_gx_status(status_code: i32) -> GX_STATUS_LIST {
 }
 
 pub fn gx_status_describe(status: i32) {
-    let gx_status = format!("{:?}",convert_to_gx_status(status));
+    let gx_status = format!("{:?}", convert_to_gx_status(status));
     println!("GX Error: {:?}", gx_status);
 }

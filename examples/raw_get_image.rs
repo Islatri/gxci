@@ -1,30 +1,19 @@
-
 use std::mem::size_of;
 use std::slice;
 
-use opencv::{
-    imgcodecs,
-    core,
-};
+use opencv::{core, imgcodecs};
 
 use gxci::{
-    raw::{
-        gx_interface::*, 
-        gx_enum::*,
-        gx_struct::*,
-        gx_handle::*,
-    },
-    utils::{
-        debug::print_device_info,
-        builder::GXDeviceBaseInfoBuilder,
-        facade::*,
-    },
+    raw::{gx_enum::*, gx_handle::*, gx_interface::*, gx_struct::*},
+    utils::{builder::GXDeviceBaseInfoBuilder, debug::print_device_info, facade::*},
 };
-
 
 fn main() -> Result<()> {
     unsafe {
-        let gx = GXInstance::new("C:\\Program Files\\Daheng Imaging\\GalaxySDK\\APIDll\\Win64\\GxIAPI.dll").expect("Failed to load library");
+        let gx = GXInstance::new(
+            "C:\\Program Files\\Daheng Imaging\\GalaxySDK\\APIDll\\Win64\\GxIAPI.dll",
+        )
+        .expect("Failed to load library");
         gx.gx_init_lib().expect("Failed to initialize library");
 
         // Update the device list
@@ -33,10 +22,9 @@ fn main() -> Result<()> {
             .expect("Failed to update device list");
 
         if device_num > 0 {
-
-            let mut base_info: Vec<GX_DEVICE_BASE_INFO> = (0..device_num).map(|_| {
-                GXDeviceBaseInfoBuilder::new().build()
-            }).collect();
+            let mut base_info: Vec<GX_DEVICE_BASE_INFO> = (0..device_num)
+                .map(|_| GXDeviceBaseInfoBuilder::new().build())
+                .collect();
             let mut size = (device_num as usize) * size_of::<GX_DEVICE_BASE_INFO>();
             let status = gx
                 .gx_get_all_device_base_info(base_info.as_mut_ptr(), &mut size)
@@ -47,7 +35,7 @@ fn main() -> Result<()> {
                     "Device base info retrieved successfully. Number of devices: {}",
                     device_num
                 );
-                
+
                 for device in &base_info {
                     print_device_info(&device);
                 }
@@ -71,38 +59,41 @@ fn main() -> Result<()> {
                     // 这种写法在所有权机制下是错误的，因为image_buffer在返回的时候就已经被释放了
                     // let frame_data_facade = fetch_frame_data(&gx, device_handle);
                     // let mut frame_data = convert_to_frame_data(&frame_data_facade.unwrap());
-                    
+
                     // 这种写法是正确的，因为image_buffer被返回到了当前作用域
                     #[allow(unused_variables)]
-                    let (frame_data_facade, image_buffer) = fetch_frame_data(&gx, device_handle).unwrap();
+                    let (frame_data_facade, image_buffer) =
+                        fetch_frame_data(&gx, device_handle).unwrap();
                     let mut frame_data = convert_to_frame_data(&frame_data_facade);
 
+                    let result = gx.gx_get_image(device_handle, &mut frame_data, 100);
+                    match result {
+                        Ok(_) => {
+                            println!("Image captured successfully.");
 
-                        let result = gx.gx_get_image(device_handle, &mut frame_data, 100);
-                        match result {
-                            Ok(_) => {
-                                println!("Image captured successfully.");
+                            if frame_data.nStatus == 0 {
+                                let data = slice::from_raw_parts(
+                                    frame_data.pImgBuf as *const u8,
+                                    (frame_data.nWidth * frame_data.nHeight) as usize,
+                                );
 
-                                if frame_data.nStatus == 0 {
-                                    let data = slice::from_raw_parts(frame_data.pImgBuf as *const u8, (frame_data.nWidth * frame_data.nHeight) as usize);
-                                    
-                                    let mat = core::Mat::new_rows_cols_with_data(
-                                        frame_data.nHeight, 
-                                        frame_data.nWidth, 
-                                        data
-                                    ).unwrap();
-                        
-                                    let vec = core::Vector::<i32>::new();
-                                    if imgcodecs::imwrite("right.png", &mat, &vec).unwrap() {
-                                        println!("Image saved successfully.");
-                                    } else {
-                                        println!("Failed to save the image.");
-                                    }
-                                    
+                                let mat = core::Mat::new_rows_cols_with_data(
+                                    frame_data.nHeight,
+                                    frame_data.nWidth,
+                                    data,
+                                )
+                                .unwrap();
+
+                                let vec = core::Vector::<i32>::new();
+                                if imgcodecs::imwrite("right.png", &mat, &vec).unwrap() {
+                                    println!("Image saved successfully.");
+                                } else {
+                                    println!("Failed to save the image.");
                                 }
                             }
-                            Err(e) => eprintln!("Failed to capture image: {:?}", e),
                         }
+                        Err(e) => eprintln!("Failed to capture image: {:?}", e),
+                    }
 
                     gx.gx_send_command(device_handle, GX_FEATURE_ID::GX_COMMAND_ACQUISITION_STOP)
                         .expect("Failed to send command");

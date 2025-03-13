@@ -1,5 +1,5 @@
 // Placeholder
-use std::sync::{LazyLock,Arc,Mutex};
+use std::sync::{Arc, LazyLock, Mutex};
 use std::sync::{MutexGuard, PoisonError};
 
 pub type Result<T> = core::result::Result<T, Error>;
@@ -127,4 +127,3 @@ impl std::fmt::Debug for ErrorKind {
         }
     }
 }
-

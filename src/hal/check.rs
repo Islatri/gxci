@@ -1,6 +1,6 @@
 //! Check module for COMMON error handling.
 
-use crate::error::{Result, Error, ErrorKind};
+use crate::error::{Error, ErrorKind, Result};
 
 pub fn check_status<F>(status: i32, error_fn: F) -> Result<()>
 where
@@ -38,7 +38,3 @@ where
     let gx_error_fn = |status| Error::new(ErrorKind::GxStatusError(status));
     check_status_with_ok_fn(status, ok_fn, gx_error_fn)
 }
-
-
-
-

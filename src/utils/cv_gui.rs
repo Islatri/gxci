@@ -5,7 +5,7 @@
 
 // use crate::{
 //     raw::{
-//         gx_interface::*, 
+//         gx_interface::*,
 //         gx_enum::*,
 //         gx_struct::*,
 //         gx_const::*,
@@ -17,4 +17,3 @@
 //         facade::*,
 //     },
 // };
-

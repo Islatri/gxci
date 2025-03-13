@@ -24,11 +24,11 @@ pub fn extract_image_data(frame_data: &GX_FRAME_DATA) -> Option<Vec<u8>> {
 //     let mut mat = core::Mat::default();
 //     if frame_data.nStatus == 0 {
 //         let data = slice::from_raw_parts(frame_data.pImgBuf as *const u8, (frame_data.nWidth * frame_data.nHeight) as usize);
-        
+
 //         let mat = core::Mat::new_rows_cols_with_data(
-//             frame_data.nHeight, 
-//             frame_data.nWidth, 
-//             // core::CV_8UC1, 
+//             frame_data.nHeight,
+//             frame_data.nWidth,
+//             // core::CV_8UC1,
 //             data
 //         ).unwrap();
 //     }

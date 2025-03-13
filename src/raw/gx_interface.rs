@@ -3,9 +3,9 @@
 
 use libloading::{Library, Symbol};
 
-use std::ffi::{c_char, c_void, CStr};
-use crate::raw::{gx_callback::*, gx_enum::*, gx_handle::*, gx_struct::*};
 pub use crate::error::{Error, ErrorKind, Result};
+use crate::raw::{gx_callback::*, gx_enum::*, gx_handle::*, gx_struct::*};
+use std::ffi::{CStr, c_char, c_void};
 
 fn convert_to_gx_status(status_code: i32) -> GX_STATUS_LIST {
     match status_code {
@@ -26,7 +26,6 @@ fn convert_to_gx_status(status_code: i32) -> GX_STATUS_LIST {
         -14 => GX_STATUS_LIST::GX_STATUS_TIMEOUT,
         _ => GX_STATUS_LIST::GX_STATUS_ERROR, // Default error if unknown status code
     }
-    
 }
 
 fn deconvert_from_gx_status(status: GX_STATUS_LIST) -> i32 {
@@ -48,7 +47,6 @@ fn deconvert_from_gx_status(status: GX_STATUS_LIST) -> i32 {
         GX_STATUS_LIST::GX_STATUS_TIMEOUT => -14,
     }
 }
-
 
 pub trait GXInterface {
     fn new(library_path: &str) -> Result<Self>
@@ -79,10 +77,10 @@ pub trait GXInterface {
     // Config
 
     fn gx_export_config_file(&self, device: GX_DEV_HANDLE, file_path: *const c_char)
-        -> Result<i32>;
+    -> Result<i32>;
 
     fn gx_import_config_file(&self, device: GX_DEV_HANDLE, file_path: *const c_char)
-        -> Result<i32>;
+    -> Result<i32>;
 
     // Command
     fn gx_send_command(&self, device: GX_DEV_HANDLE, feature_id: GX_FEATURE_ID) -> Result<i32>;
@@ -359,8 +357,7 @@ impl GXInterface for GXInstance {
     /// ```
     fn gx_init_lib(&self) -> Result<i32> {
         unsafe {
-            let gx_init_lib: Symbol<extern "C" fn() -> i32> =
-                self.lib.get(b"GXInitLib")?;
+            let gx_init_lib: Symbol<extern "C" fn() -> i32> = self.lib.get(b"GXInitLib")?;
             Ok(gx_init_lib())
         }
     }
@@ -388,8 +385,7 @@ impl GXInterface for GXInstance {
     /// ```
     fn gx_close_lib(&self) -> Result<()> {
         unsafe {
-            let gx_close_lib: Symbol<extern "C" fn() -> i32> =
-                self.lib.get(b"GXCloseLib")?;
+            let gx_close_lib: Symbol<extern "C" fn() -> i32> = self.lib.get(b"GXCloseLib")?;
             gx_close_lib();
             Ok(())
         }
@@ -654,7 +650,9 @@ impl GXInterface for GXInstance {
             let status = convert_to_gx_status(status_code);
             match status {
                 GX_STATUS_LIST::GX_STATUS_SUCCESS => Ok(0),
-                _ => Err(Error::new(ErrorKind::GxStatusError(deconvert_from_gx_status(status)))),
+                _ => Err(Error::new(ErrorKind::GxStatusError(
+                    deconvert_from_gx_status(status),
+                ))),
                 // Err(
                 //     GxciError::CommandError(format!(
                 //     "GXSendCommand failed with status: {:?}",
@@ -693,7 +691,9 @@ impl GXInterface for GXInstance {
             let status = convert_to_gx_status(status_code);
             match status {
                 GX_STATUS_LIST::GX_STATUS_SUCCESS => Ok(0),
-                _ => Err(Error::new(ErrorKind::GxStatusError(deconvert_from_gx_status(status)))),
+                _ => Err(Error::new(ErrorKind::GxStatusError(
+                    deconvert_from_gx_status(status),
+                ))),
             }
         }
     }
@@ -1477,7 +1477,9 @@ impl GXInterface for GXInstance {
             let status = convert_to_gx_status(status_code);
             match status {
                 GX_STATUS_LIST::GX_STATUS_SUCCESS => Ok(0),
-                _ => Err(Error::new(ErrorKind::GxStatusError(deconvert_from_gx_status(status)))),
+                _ => Err(Error::new(ErrorKind::GxStatusError(
+                    deconvert_from_gx_status(status),
+                ))),
             }
         }
     }
@@ -1498,7 +1500,9 @@ impl GXInterface for GXInstance {
             let status = convert_to_gx_status(status_code);
             match status {
                 GX_STATUS_LIST::GX_STATUS_SUCCESS => Ok(0),
-                _ => Err(Error::new(ErrorKind::GxStatusError(deconvert_from_gx_status(status)))),
+                _ => Err(Error::new(ErrorKind::GxStatusError(
+                    deconvert_from_gx_status(status),
+                ))),
             }
         }
     }
@@ -1524,9 +1528,7 @@ impl GXInterface for GXInstance {
                     callback_fun: GXDeviceOfflineCallBack,
                     callback_handle: *mut GX_EVENT_CALLBACK_HANDLE,
                 ) -> i32,
-            > = self
-                .lib
-                .get(b"GXRegisterDeviceOfflineCallback")?;
+            > = self.lib.get(b"GXRegisterDeviceOfflineCallback")?;
 
             let result = gx_register_device_offline_callback(
                 device,
@@ -1555,9 +1557,7 @@ impl GXInterface for GXInstance {
                     device: GX_DEV_HANDLE,
                     callback_handle: GX_EVENT_CALLBACK_HANDLE,
                 ) -> i32,
-            > = self
-                .lib
-                .get(b"GXUnregisterDeviceOfflineCallback")?;
+            > = self.lib.get(b"GXUnregisterDeviceOfflineCallback")?;
 
             let result = gx_unregister_device_offline_callback(device, callback_handle);
             Ok(result)

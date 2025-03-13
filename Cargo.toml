@@ -1,6 +1,6 @@
 [package]
 name = "gxci"
-version = "0.3.7"
+version = "0.3.8"
 edition = "2024"
 authors = [
     "Hako Chest <zoneherobrine@gmail.com>"
@@ -8,7 +8,7 @@ authors = [
 rust-version = "1.85.0"
 description = "A safe raw-and-HAL camera interface based on Daheng-Image's GxIAPI(Galaxy Camera SDK)"
 keywords = ["galaxy", "daheng", "camera","interface","hal"]
-categories = ["hardware-support"]
+categories = ["hardware-support","api-bindings"]
 license = "MIT"
 documentation = "https://docs.rs/gxci"
 repository = "https://github.com/islatri/gxci"

@@ -5,7 +5,7 @@
 
 use super::gx_const::*;
 use super::gx_enum::*;
-use std::ffi::{c_int,c_char,c_void};
+use std::ffi::{c_char, c_int, c_void};
 
 #[repr(C)]
 #[derive(Debug, Clone)]
@@ -46,7 +46,7 @@ pub struct GX_OPEN_PARAM {
 }
 
 #[repr(C)]
-#[derive(Debug, Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct GX_FRAME_CALLBACK_PARAM {
     pub pUserParam: *mut c_void,
     pub status: c_int,
@@ -61,17 +61,17 @@ pub struct GX_FRAME_CALLBACK_PARAM {
 }
 
 #[repr(C)]
-#[derive(Debug, Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct GX_FRAME_DATA {
     pub nStatus: c_int,
-    pub pImgBuf: *mut c_void,   // Pointer to the image buffer
-    pub nWidth: i32,             // Image width, adjusted to i32 to match C definition
-    pub nHeight: i32,            // Image height, adjusted to i32 to match C definition
-    pub nPixelFormat: i32,      // Pixel format, adjusted to i32 to match C definition
-    pub nImgSize: i32,          // Size of the image buffer, adjusted to i32 to match C definition
-    pub nFrameID: u64,          // Frame ID
-    pub nTimestamp: u64,         // Timestamp of the frame
-    pub reserved: [i32; 1],     // Reserved, array of 1 i32 to match C definition
+    pub pImgBuf: *mut c_void, // Pointer to the image buffer
+    pub nWidth: i32,          // Image width, adjusted to i32 to match C definition
+    pub nHeight: i32,         // Image height, adjusted to i32 to match C definition
+    pub nPixelFormat: i32,    // Pixel format, adjusted to i32 to match C definition
+    pub nImgSize: i32,        // Size of the image buffer, adjusted to i32 to match C definition
+    pub nFrameID: u64,        // Frame ID
+    pub nTimestamp: u64,      // Timestamp of the frame
+    pub reserved: [i32; 1],   // Reserved, array of 1 i32 to match C definition
 }
 
 #[repr(C)]
@@ -143,7 +143,7 @@ impl GX_FLOAT_RANGE {
 pub struct GX_ENUM_DESCRIPTION {
     pub nValue: i64,
     // It's a AMAZING SOLUTION that - 4 to make the size of C's szSymbolic align to Rusts
-    pub szSymbolic: [c_char; GX_INFO_LENGTH_64_BYTE-4],
+    pub szSymbolic: [c_char; GX_INFO_LENGTH_64_BYTE - 4],
     pub reserved: [i32; 8],
 }
 
@@ -151,7 +151,7 @@ impl GX_ENUM_DESCRIPTION {
     pub fn new() -> Self {
         Self {
             nValue: 0,
-            szSymbolic: [0; GX_INFO_LENGTH_64_BYTE-4],
+            szSymbolic: [0; GX_INFO_LENGTH_64_BYTE - 4],
             reserved: [0; 8],
         }
     }

@@ -16,8 +16,7 @@
 
 // #[cfg(feature = "solo")]
 // pub fn gxi_set_user_output_value(user_output_value:bool) -> Result<()> {
-//     gxi_set_feature_value(GX_FEATURE_ID::GX_BOOL_USER_OUTPUT_VALUE, &user_output_value)?;    
+//     gxi_set_feature_value(GX_FEATURE_ID::GX_BOOL_USER_OUTPUT_VALUE, &user_output_value)?;
 //     println!("Successfully set user output value to {}",user_output_value);
 //     Ok(())
 // }
-

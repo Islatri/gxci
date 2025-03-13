@@ -19,4 +19,3 @@ pub fn print_device_info(device_info: &GX_DEVICE_BASE_INFO) {
     println!("Device Class: {:?}", device_info.deviceClass);
     println!("-----------------------");
 }
-

@@ -1,12 +1,12 @@
+use gxci::hal::base::*;
 use gxci::hal::control::device::*;
 use gxci::hal::control::image_format::*;
-use gxci::hal::base::*;
 use gxci::hal::device::*;
 use gxci::utils::debug::print_device_info;
 
-fn main()->Result<()> {
+fn main() -> Result<()> {
     gxci_init_default()?;
-    
+
     let device_num = gxi_count_devices(1000)?;
     println!("Device number: {}", device_num);
 
@@ -14,7 +14,7 @@ fn main()->Result<()> {
     for device in &base_info {
         print_device_info(&device);
     }
-    
+
     gxi_open_device()?;
 
     let name = gxi_get_device_vendor_name()?;
@@ -44,6 +44,6 @@ fn main()->Result<()> {
     gxi_close_device()?;
 
     gxci_close()?;
-    
+
     Ok(())
 }
