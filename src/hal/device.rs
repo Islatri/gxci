@@ -388,7 +388,7 @@ unsafe impl Send for GxiFrameCallbackData {}
 
 #[cfg(all(feature = "solo", feature = "use-opencv"))]
 extern "C" fn frame_callback_opencv(p_frame_callback_data: *mut GX_FRAME_CALLBACK_PARAM) {
-    let frame_callback_data = extract_frame_callback_param(p_frame_callback_data);
+    let frame_callback_data = unsafe { extract_frame_callback_param(p_frame_callback_data) };
     let data = extract_callback_img_buf(frame_callback_data);
 
     let mat = core::Mat::new_rows_cols_with_data(
@@ -411,10 +411,7 @@ pub fn gxi_use_stream(frame_callback: GXCaptureCallBack) -> Result<()> {
 
     gxi_send_command(GX_FEATURE_ID::GX_COMMAND_ACQUISITION_START)?;
     highgui::named_window("Camera", highgui::WINDOW_AUTOSIZE).unwrap();
-    loop {
-        sleep(Duration::from_secs(10));
-        break;
-    }
+    sleep(Duration::from_secs(10));
 
     check_gx_status(status)?;
     println!("Successfully opened stream");
@@ -429,10 +426,7 @@ pub fn gxi_open_stream() -> Result<()> {
 
     gxi_send_command(GX_FEATURE_ID::GX_COMMAND_ACQUISITION_START)?;
     highgui::named_window("Camera", highgui::WINDOW_AUTOSIZE).unwrap();
-    loop {
-        sleep(Duration::from_secs(10));
-        break;
-    }
+    sleep(Duration::from_secs(10));
 
     check_gx_status(status)?;
     println!("Successfully opened stream");
@@ -457,10 +451,7 @@ pub fn gxi_open_stream_interval(interval_secs: u64) -> Result<()> {
     gxi_send_command(GX_FEATURE_ID::GX_COMMAND_ACQUISITION_START)?;
 
     highgui::named_window("Camera", highgui::WINDOW_AUTOSIZE).unwrap();
-    loop {
-        sleep(Duration::from_secs(interval_secs));
-        break;
-    }
+    sleep(Duration::from_secs(interval_secs));
 
     gxi_send_command(GX_FEATURE_ID::GX_COMMAND_ACQUISITION_STOP)?;
     let status = gxi_check(|gxi| gxi.gx_unregister_capture_callback(gxi_device))?;

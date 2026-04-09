@@ -102,6 +102,12 @@ pub struct GX_INT_RANGE {
     pub reserved: [i32; 8],
 }
 
+impl Default for GX_INT_RANGE {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl GX_INT_RANGE {
     pub fn new() -> Self {
         Self {
@@ -122,6 +128,12 @@ pub struct GX_FLOAT_RANGE {
     pub szUnit: [c_char; GX_INFO_LENGTH_8_BYTE],
     pub bIncIsValid: bool,
     pub reserved: [i8; 31],
+}
+
+impl Default for GX_FLOAT_RANGE {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl GX_FLOAT_RANGE {
@@ -145,6 +157,12 @@ pub struct GX_ENUM_DESCRIPTION {
     // It's a AMAZING SOLUTION that - 4 to make the size of C's szSymbolic align to Rusts
     pub szSymbolic: [c_char; GX_INFO_LENGTH_64_BYTE - 4],
     pub reserved: [i32; 8],
+}
+
+impl Default for GX_ENUM_DESCRIPTION {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl GX_ENUM_DESCRIPTION {

@@ -96,10 +96,7 @@ fn main() -> Result<()> {
                     .expect("Failed to send command");
 
                 highgui::named_window("Camera", highgui::WINDOW_AUTOSIZE).unwrap();
-                loop {
-                    sleep(Duration::from_secs(60));
-                    break;
-                }
+                sleep(Duration::from_secs(60));
 
                 gx.gx_send_command(device_handle, GX_FEATURE_ID::GX_COMMAND_ACQUISITION_STOP)
                     .expect("Failed to send command");
@@ -113,7 +110,7 @@ fn main() -> Result<()> {
                 // Close the device
                 gx.gx_close_device(device_handle)
                     .expect("Failed to close device");
-                println!("Device closed.")
+                println!("Device closed.");
             } else {
                 println!(
                     "Failed to open device with SN: {}",

@@ -2,6 +2,8 @@
 use std::sync::{Arc, LazyLock, Mutex};
 use std::sync::{MutexGuard, PoisonError};
 
+use crate::utils::status::convert_to_gx_status;
+
 pub type Result<T> = core::result::Result<T, Error>;
 
 // Error
@@ -58,11 +60,11 @@ pub enum MutexType {
 }
 
 pub trait MutexExt<T> {
-    fn lock_safe(&self, mutex_type: MutexType) -> Result<MutexGuard<T>>;
+    fn lock_safe(&self, mutex_type: MutexType) -> Result<MutexGuard<'_, T>>;
 }
 
 impl<T> MutexExt<T> for LazyLock<Arc<Mutex<T>>> {
-    fn lock_safe(&self, mutex_type: MutexType) -> Result<MutexGuard<T>> {
+    fn lock_safe(&self, mutex_type: MutexType) -> Result<MutexGuard<'_, T>> {
         self.lock().map_err(|e: PoisonError<MutexGuard<T>>| {
             Error::new(ErrorKind::MutexPoisonError {
                 mutex_type,
@@ -95,7 +97,9 @@ impl std::fmt::Display for ErrorKind {
             ErrorKind::NulError(e) => write!(f, "NulError: {:?}", e),
             ErrorKind::DeviceHandleError(e) => write!(f, "DeviceHandleError: {:?}", e),
             ErrorKind::LibLoadingError(e) => write!(f, "LibLoadingError: {:?}", e),
-            ErrorKind::GxStatusError(e) => write!(f, "GxStatusError: {:?}", e),
+            ErrorKind::GxStatusError(e) => {
+                write!(f, "GxStatusError: {:?}", convert_to_gx_status(*e))
+            }
             ErrorKind::GxiError(e) => write!(f, "GxiError: {:?}", e),
             ErrorKind::FrameDataError(e) => write!(f, "FrameDataError: {:?}", e),
             ErrorKind::MutexPoisonError {
@@ -115,7 +119,9 @@ impl std::fmt::Debug for ErrorKind {
             ErrorKind::NulError(e) => write!(f, "NulError: {:?}", e),
             ErrorKind::DeviceHandleError(e) => write!(f, "DeviceHandleError: {:?}", e),
             ErrorKind::LibLoadingError(e) => write!(f, "LibLoadingError: {:?}", e),
-            ErrorKind::GxStatusError(e) => write!(f, "GxStatusError: {:?}", e),
+            ErrorKind::GxStatusError(e) => {
+                write!(f, "GxStatusError: {:?}", convert_to_gx_status(*e))
+            }
             ErrorKind::GxiError(e) => write!(f, "GxiError: {:?}", e),
             ErrorKind::FrameDataError(e) => write!(f, "FrameDataError: {:?}", e),
             ErrorKind::MutexPoisonError {

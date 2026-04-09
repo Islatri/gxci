@@ -15,6 +15,12 @@ pub struct GXDeviceBaseInfoBuilder {
     reserved: [u8; 300],
 }
 
+impl Default for GXDeviceBaseInfoBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl GXDeviceBaseInfoBuilder {
     pub fn new() -> Self {
         Self {
@@ -95,6 +101,12 @@ pub struct GXOpenParamBuilder {
     pub pszContent: *const c_char,
     pub openMode: GX_OPEN_MODE,
     pub accessMode: GX_ACCESS_MODE,
+}
+
+impl Default for GXOpenParamBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl GXOpenParamBuilder {

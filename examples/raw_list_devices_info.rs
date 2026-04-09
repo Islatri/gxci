@@ -49,7 +49,7 @@ fn main() {
                 device_num
             );
             for device in &base_info {
-                print_device_info(&device);
+                print_device_info(device);
             }
         } else {
             println!("Failed to retrieve device base info, status: {}", status);

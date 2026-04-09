@@ -36,7 +36,7 @@ fn main() {
             );
 
             for device in &base_info {
-                print_device_info(&device);
+                print_device_info(device);
             }
 
             // Attempt to open the first device using its SN
@@ -59,7 +59,7 @@ fn main() {
                 // Close the device
                 gx.gx_close_device(device_handle)
                     .expect("Failed to close device");
-                println!("Device closed.")
+                println!("Device closed.");
             } else {
                 println!(
                     "Failed to open device with SN: {}",

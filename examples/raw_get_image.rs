@@ -37,7 +37,7 @@ fn main() -> Result<()> {
                 );
 
                 for device in &base_info {
-                    print_device_info(&device);
+                    print_device_info(device);
                 }
 
                 let first_device_sn = std::str::from_utf8(&base_info[0].szSN).unwrap_or("");
@@ -101,7 +101,7 @@ fn main() -> Result<()> {
                     // Close the device
                     gx.gx_close_device(device_handle)
                         .expect("Failed to close device");
-                    println!("Device closed.")
+                    println!("Device closed.");
                 } else {
                     println!(
                         "Failed to open device with SN: {}",

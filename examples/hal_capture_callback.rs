@@ -12,7 +12,7 @@ fn main() -> Result<()> {
 
     let base_info = gxi_list_devices()?;
     for device in &base_info {
-        print_device_info(&device);
+        print_device_info(device);
     }
 
     gxi_open_device()?;

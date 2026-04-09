@@ -16,9 +16,9 @@ where
     if let Some(gxi) = gxi.as_ref() {
         func(gxi)
     } else {
-        Err(Error::new(ErrorKind::GxiError(format!(
-            "GXI is None while gxi_check(). Please check your gxci_init situation."
-        ))))
+        Err(Error::new(ErrorKind::GxiError(
+            "GXI is None while gxi_check(). Please check your gxci_init situation.".to_string(),
+        )))
     }
 }
 

@@ -508,7 +508,6 @@ impl GXInterface for GXInstance {
     ///
     /// }
     /// ```
-
     fn gx_get_all_device_base_info(
         &self,
         p_device_info: *mut GX_DEVICE_BASE_INFO,
@@ -597,6 +596,7 @@ impl GXInterface for GXInstance {
     /// ```
     /// use crate::gx::gx_interface::GXInterface;
     /// ```
+    #[allow(clippy::not_unsafe_ptr_arg_deref)]
     fn gx_export_config_file(
         &self,
         device: GX_DEV_HANDLE,
@@ -606,7 +606,11 @@ impl GXInterface for GXInstance {
             let gx_export_config_file: Symbol<
                 extern "C" fn(device: GX_DEV_HANDLE, file_path: *const c_char) -> i32,
             > = self.lib.get(b"GXExportConfigFile")?;
-            println!("Exported config file to: {:?}", CStr::from_ptr(file_path));
+            #[cfg(debug_assertions)]
+            {
+                let file_path_str = CStr::from_ptr(file_path);
+                println!("Exported config file to: {:?}", file_path_str);
+            }
             Ok(gx_export_config_file(device, file_path))
         }
     }
@@ -618,6 +622,7 @@ impl GXInterface for GXInstance {
     /// ```
     /// use crate::gx::gx_interface::GXInterface;
     /// ```
+    #[allow(clippy::not_unsafe_ptr_arg_deref)]
     fn gx_import_config_file(
         &self,
         device: GX_DEV_HANDLE,
@@ -627,7 +632,11 @@ impl GXInterface for GXInstance {
             let gx_import_config_file: Symbol<
                 extern "C" fn(device: GX_DEV_HANDLE, file_path: *const c_char) -> i32,
             > = self.lib.get(b"GXImportConfigFile")?;
-            println!("Imported config file from: {:?}", CStr::from_ptr(file_path));
+            #[cfg(debug_assertions)]
+            {
+                let file_path_str = CStr::from_ptr(file_path);
+                println!("Imported config file from: {:?}", file_path_str);
+            }
             Ok(gx_import_config_file(device, file_path))
         }
     }
@@ -671,6 +680,7 @@ impl GXInterface for GXInstance {
     /// use crate::gx::gx_interface::GXInterface;
     ///
     /// ```
+    #[allow(clippy::not_unsafe_ptr_arg_deref)]
     fn gx_get_image(
         &self,
         device: GX_DEV_HANDLE,
@@ -686,7 +696,12 @@ impl GXInterface for GXInstance {
                 ) -> i32,
             > = self.lib.get(b"GXGetImage")?;
             println!("p_frame_data: {:?}", p_frame_data);
-            println!("frame_data: {:?}", *p_frame_data);
+            #[cfg(debug_assertions)]
+            {
+                // SAFETY: We are in an unsafe block and p_frame_data is expected to be valid
+                let frame_data_debug = *p_frame_data;
+                println!("frame_data: {:?}", frame_data_debug);
+            }
             let status_code = gx_get_image(device, p_frame_data, timeout);
             let status = convert_to_gx_status(status_code);
             match status {
@@ -1405,6 +1420,7 @@ impl GXInterface for GXInstance {
     /// ```
     /// use crate::gx::gx_interface::GXInterface;
     /// ```
+    #[allow(clippy::not_unsafe_ptr_arg_deref)]
     fn gx_get_last_error(
         &self,
         error_code: *mut GX_STATUS_LIST,
@@ -1421,8 +1437,10 @@ impl GXInterface for GXInstance {
             > = self.lib.get(b"GXGetLastError")?;
 
             let result = gx_get_last_error(error_code, err_text, size);
+            #[cfg(debug_assertions)]
             if !err_text.is_null() && !size.is_null() {
-                println!("Error text: {}", CStr::from_ptr(err_text).to_string_lossy());
+                let err_text_str = CStr::from_ptr(err_text);
+                println!("Error text: {}", err_text_str.to_string_lossy());
             }
             Ok(result)
         }

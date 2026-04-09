@@ -1,6 +1,4 @@
 use gxci::hal::base::*;
-use gxci::hal::control::analog::*;
-use gxci::hal::control::image_format::*;
 use gxci::hal::device::*;
 use gxci::opencv::{core, highgui};
 use gxci::raw::gx_struct::GX_FRAME_CALLBACK_PARAM;
@@ -8,7 +6,7 @@ use gxci::utils::debug::print_device_info;
 use gxci::utils::extract::{extract_callback_img_buf, extract_frame_callback_param};
 
 extern "C" fn frame_callback(p_frame_callback_data: *mut GX_FRAME_CALLBACK_PARAM) {
-    let frame_callback_data = extract_frame_callback_param(p_frame_callback_data);
+    let frame_callback_data = unsafe { extract_frame_callback_param(p_frame_callback_data) };
     let data = extract_callback_img_buf(frame_callback_data);
 
     let mat = core::Mat::new_rows_cols_with_data(
@@ -37,17 +35,19 @@ fn main() -> Result<()> {
 
     gxi_open_device()?;
 
-    let max_h = gxi_get_max_height()?;
-    let max_w = gxi_get_max_width()?;
+    // let max_h = gxi_get_max_height()?;
+    // let max_w = gxi_get_max_width()?;
 
-    gxi_set_height(max_h)?;
-    gxi_set_width(max_w)?;
+    // gxi_set_height(max_h)?;
+    // gxi_set_width(max_w)?;
 
-    gxi_set_gain_auto_continuous()?;
+    // gxi_set_gain_auto_continuous()?;
 
     // gxi_set_gain(1.0)?;
 
     gxi_use_stream(frame_callback)?;
+
+    std::thread::sleep(std::time::Duration::from_secs(40));
 
     gxi_close_device()?;
 

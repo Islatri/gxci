@@ -1,5 +1,6 @@
 //! Callback function for frame data acquisition, type declaration.
 #![allow(dead_code)]
+#![allow(non_snake_case)]
 
 use crate::raw::{gx_enum::*, gx_struct::*};
 use std::ffi::c_void;
