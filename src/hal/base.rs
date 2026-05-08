@@ -1,6 +1,7 @@
 //! Base functions for the HAL. Such as lib checking, initialization and closing.
 pub use crate::error::Result;
 use crate::error::{Error, ErrorKind, MutexExt, MutexType};
+use crate::hal::check::check_gx_status;
 use crate::raw::gx_interface::*;
 use std::sync::{Arc, LazyLock, Mutex};
 
@@ -31,7 +32,8 @@ pub fn gxci_init(dll_path: &str) -> Result<()> {
     }
 
     *gxi = Some(GXInstance::new(dll_path)?);
-    gxi.as_ref().unwrap().gx_init_lib()?;
+    let status = gxi.as_ref().unwrap().gx_init_lib()?;
+    check_gx_status(status)?;
     Ok(())
 }
 
@@ -45,7 +47,8 @@ pub fn gxci_init_default() -> Result<()> {
     }
 
     *gxi = Some(GXInstance::new(dll_path_default)?);
-    gxi.as_ref().unwrap().gx_init_lib()?;
+    let status = gxi.as_ref().unwrap().gx_init_lib()?;
+    check_gx_status(status)?;
     Ok(())
 }
 
