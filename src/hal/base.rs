@@ -38,18 +38,17 @@ pub fn gxci_init(dll_path: &str) -> Result<()> {
 }
 
 pub fn gxci_init_default() -> Result<()> {
-    let dll_path_default =
-        "C:\\Program Files\\Daheng Imaging\\GalaxySDK\\APIDll\\Win64\\GxIAPI.dll";
+    let dll_path = std::env::var("GXCI_DLL_PATH").unwrap_or_else(|_| {
+        if cfg!(windows) {
+            "C:\\Program Files\\Daheng Imaging\\GalaxySDK\\APIDll\\Win64\\GxIAPI.dll".to_string()
+        } else if cfg!(unix) {
+            "/usr/lib/libgxiapi.so".to_string()
+        } else {
+            panic!("Unsupported platform: no default DLL path. Set GXCI_DLL_PATH env var.");
+        }
+    });
 
-    let mut gxi = GXI.lock_safe(MutexType::Gxi)?;
-    if gxi.is_some() {
-        println!("Warning: GXI is already initialized. Reinitializing.");
-    }
-
-    *gxi = Some(GXInstance::new(dll_path_default)?);
-    let status = gxi.as_ref().unwrap().gx_init_lib()?;
-    check_gx_status(status)?;
-    Ok(())
+    gxci_init(&dll_path)
 }
 
 pub fn gxci_close() -> Result<()> {
