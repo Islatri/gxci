@@ -344,8 +344,10 @@ pub fn gxi_save_image_as_png(filename: &str) -> Result<()> {
 
 #[cfg(all(feature = "solo", feature = "use-imageproc"))]
 pub fn gxi_save_image_as_png(filename: &str) -> Result<()> {
-    let frame_data = GXI_FRAME_DATA.lock_safe(MutexType::FrameData)?.as_ref()
-        ..ok_or(Error::new(ErrorKind::FrameDataError(
+    let frame_data = GXI_FRAME_DATA
+        .lock_safe(MutexType::FrameData)?
+        .as_ref()
+        .ok_or(Error::new(ErrorKind::FrameDataError(
             "Frame data is None. Please check your get image situation.".to_string(),
         )))?
         .frame_data;
@@ -404,7 +406,7 @@ extern "C" fn frame_callback_opencv(p_frame_callback_data: *mut GX_FRAME_CALLBAC
     }
 }
 
-#[cfg(feature = "solo")]
+#[cfg(all(feature = "solo", feature = "use-opencv"))]
 pub fn gxi_use_stream(frame_callback: GXCaptureCallBack) -> Result<()> {
     let gxi_device = gxi_get_device_handle()?;
     let status = gxi_check(|gxi| gxi.gx_register_capture_callback(gxi_device, frame_callback))?;
